@@ -1,10 +1,10 @@
 {
   "name": "@versita/fp-lib",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "FP library",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc src/**/*.ts* --outDir dist",
+    "build": "tsc ./**/*.ts*",
     "prepublish": "npm run build"
   },
   "repository": {
