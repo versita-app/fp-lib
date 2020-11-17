@@ -37,6 +37,10 @@ export const chain = curry((f: () => any, m: Monad) => {
   return m.chain(f)
 })
 
+export const fold = curry((f1: () => any, f2: () => any, t: Task) => {
+  return t.fold(f1, f2)
+})
+
 interface IGenericObject { [key: string]: any }
 export const prop = curry((x: string, y: IGenericObject) => y[x])
 

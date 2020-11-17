@@ -1,6 +1,6 @@
 {
   "name": "@versita/fp-lib",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "FP library",
   "main": "dist/index.js",
   "scripts": {

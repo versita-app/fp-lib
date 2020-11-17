@@ -13,7 +13,7 @@ export default abstract class Monad {
   // tslint:enable ban-types
 
   protected static $valueIsMapCallback<T, U> (fn: any): fn is MapCallback<T, U> {
-    if (typeof fn === 'function' && fn.length === 1) {
+    if (typeof fn === 'function') {
       return true
     }
 
@@ -21,7 +21,7 @@ export default abstract class Monad {
   }
 
   protected static $valueIsPartialMapCallback<T, U> (fn: any): fn is PartialMapCallback<T, U> {
-    if (typeof fn === 'function' && fn.length === 1) {
+    if (typeof fn === 'function') {
       return true
     }
 
