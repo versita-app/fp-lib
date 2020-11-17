@@ -11,7 +11,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.either = exports.reject = exports.nothing = exports.left = exports.prop = exports.chain = exports.ap = exports.map = exports.identity = exports.curry = exports.partial = exports.pipe = void 0;
+exports.either = exports.reject = exports.nothing = exports.left = exports.prop = exports.fold = exports.chain = exports.ap = exports.map = exports.identity = exports.curry = exports.partial = exports.pipe = void 0;
 var either_1 = require("./either");
 var maybe_1 = __importDefault(require("./maybe"));
 var task_1 = __importDefault(require("./task"));
@@ -60,6 +60,9 @@ exports.ap = exports.curry(function (f, m) {
 });
 exports.chain = exports.curry(function (f, m) {
     return m.chain(f);
+});
+exports.fold = exports.curry(function (f1, f2, t) {
+    return t.fold(f1, f2);
 });
 exports.prop = exports.curry(function (x, y) { return y[x]; });
 exports.left = function (a) { return new either_1.Left(a); };

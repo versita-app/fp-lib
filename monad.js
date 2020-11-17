@@ -5,13 +5,13 @@ var Monad = /** @class */ (function () {
     }
     // tslint:enable ban-types
     Monad.$valueIsMapCallback = function (fn) {
-        if (typeof fn === 'function' && fn.length === 1) {
+        if (typeof fn === 'function') {
             return true;
         }
         return false;
     };
     Monad.$valueIsPartialMapCallback = function (fn) {
-        if (typeof fn === 'function' && fn.length === 1) {
+        if (typeof fn === 'function') {
             return true;
         }
         return false;
