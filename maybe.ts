@@ -1,19 +1,17 @@
-import { curry } from './helpers'
 import { MapCallback } from './types/common'
 import Monad from './monad'
 
 export default class Maybe<T = any> extends Monad {
 
-  // tslint:disable-next-line:no-console
-  static inspect = curry((f = console.log, maybe: Maybe) => {
+  static inspect = (maybe: Maybe) => {
     if (maybe.isNothing) {
-      f('Nothing')
+      console.log('Nothing')
     } else {
-      f('Just: ', maybe.$value)
+      console.log('Just: ', maybe.$value)
     }
 
     return maybe
-  })
+  }
 
   static of <T> ($value: T) {
     return new Maybe($value)
@@ -46,7 +44,7 @@ export default class Maybe<T = any> extends Monad {
     throw TypeError('Maybe.$value is not a function')
   }
 
-  getOrError (e: Error | string) {
+  orElse (e: Error | string) {
     return this.isNothing ? e : this.$value
   }
 

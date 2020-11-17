@@ -1,28 +1,39 @@
 import Either, { Left, Right } from './either'
 import { left } from './helpers'
-import Task from './task'
+import Task, {TTaskCallback} from './task'
 
-export default class TaskEither extends Task {
+export default class TaskEither<A = any, B = any> extends Task {
+
+  static of <B = any> (b: B) {
+    const taskDefault: TTaskCallback = (_, resolve) => resolve(Either.of(b))
+    return new TaskEither(taskDefault)
+  }
+
+  static rejected <A = any> (a: A) {
+    const taskDefault: TTaskCallback = (_, resolve) => resolve(left(a))
+    return new TaskEither(taskDefault)
+  }
 
   static tryCatch (f: () => any, g: (b: any) => any) {
-    return new TaskEither(async (reject, resolve) => {
+    return new TaskEither(async (_, resolve) => {
       try {
         const b = await f()
         resolve(Either.of(b))
       } catch (a) {
-        reject(left(g(a)))
+        resolve(left(g(a)))
       }
     })
   }
 
+  static fromPromise <A = any, B = any> (promise: Promise<B>) {
+    return new Task((_, resolve) => promise
+                    .then((b: B) => resolve(Either.of(b)))
+                    .catch((a: A) => resolve(left(a))))
+  }
+
+
   static fromEither (m: Left<any> | Right<any>) {
-    return new TaskEither((resolve, reject) => {
-      if (m.isLeft) {
-        reject(left(m.value))
-      } else {
-        resolve(Either.of(m.value))
-      }
-    })
+    return new TaskEither((_, resolve) => resolve(m))
   }
 
   static runIfValid (x: TaskEither | Left<any> | Error): Left<any> | Error | Promise<Left<any> | Right<any>> {
@@ -33,7 +44,11 @@ export default class TaskEither extends Task {
       : x
   }
 
-  map (f: (b: any) => void) {
+  run () {
+    return new Promise((resolve, reject) => this.fork(reject, resolve)) as Promise<Left<A> | Right<B>>
+  }
+
+  map (f: (b: B) => void) {
     const fork = this.fork
     const cleanup = this.cleanup
 

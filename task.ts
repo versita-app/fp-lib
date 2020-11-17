@@ -17,6 +17,10 @@ export default class Task<A = any, B = any> extends Monad {
     return new Task((reject: TTaskReject) => reject(a))
   }
 
+  static fromPromise <T = any> (promise: Promise<T>) {
+    return new Task((reject, resolve) => promise.then(resolve).catch(reject))
+  }
+
   fork: TTaskCallback<A, B>
   cleanup: TTaskCleanup
 
@@ -24,6 +28,10 @@ export default class Task<A = any, B = any> extends Monad {
     super()
     this.fork = computation
     this.cleanup = cleanup || (() => undefined)
+  }
+
+  run () {
+    return new Promise((resolve, reject) => this.fork(reject, resolve)) as Promise<A | B>
   }
 
   /**

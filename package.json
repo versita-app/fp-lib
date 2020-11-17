@@ -1,10 +1,10 @@
 {
   "name": "@versita/fp-lib",
-  "version": "1.0.1",
+  "version": "1.0.11",
   "description": "FP library",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc ./**/*.ts*",
+    "build": "tsc -p ./tsconfig.json",
     "prepublish": "npm run build"
   },
   "repository": {
