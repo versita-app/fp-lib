@@ -1,3 +1,4 @@
+import {curry} from './helpers'
 import Monad from './monad'
 import { MapCallback } from './types/common'
 
@@ -20,9 +21,10 @@ export default abstract class Either<L, R> extends Monad {
   }
 
   static fold<L, R, T = any, U = any> (fa: (l: L) => T, fb: (r: R) => U, e: Left<L> | Right<R>) {
-    return e instanceof Left
+    return curry((fa, fb, e) => e instanceof Left
       ? fa(e.$value)
       : fb(e.$value)
+    )(fa,fb,e)
   }
 
   $value: L | R

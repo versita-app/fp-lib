@@ -17,6 +17,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Right = exports.Left = void 0;
+var helpers_1 = require("./helpers");
 var monad_1 = __importDefault(require("./monad"));
 var Either = /** @class */ (function (_super) {
     __extends(Either, _super);
@@ -40,9 +41,9 @@ var Either = /** @class */ (function (_super) {
         }
     };
     Either.fold = function (fa, fb, e) {
-        return e instanceof Left
+        return helpers_1.curry(function (fa, fb, e) { return e instanceof Left
             ? fa(e.$value)
-            : fb(e.$value);
+            : fb(e.$value); })(fa, fb, e);
     };
     Object.defineProperty(Either.prototype, "value", {
         get: function () {
