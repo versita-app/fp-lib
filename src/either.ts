@@ -1,9 +1,8 @@
-import {curry} from './helpers'
+import { curry } from './helpers'
 import Monad from './monad'
 import { MapCallback } from './types/common'
 
 export default abstract class Either<L, R> extends Monad {
-
   static of<R> (b: R) {
     return new Right<R>(b)
   }
@@ -20,11 +19,10 @@ export default abstract class Either<L, R> extends Monad {
     }
   }
 
-  static fold<L, R, T = any, U = any> (fa: (l: L) => T, fb: (r: R) => U, e: Left<L> | Right<R>) {
-    return curry((fa, fb, e) => e instanceof Left
+  static fold<L, R, T = any, U = any> (fa: (l: L) => T, fb: (r: R) => U) {
+    return (e: Left<L> | Right<R>) => e instanceof Left
       ? fa(e.$value)
       : fb(e.$value)
-    )(fa,fb,e)
   }
 
   $value: L | R
@@ -40,7 +38,6 @@ export default abstract class Either<L, R> extends Monad {
 }
 
 export class Left<L> extends Either<L, void> {
-
   static of (): never {
     throw new Error('Cannot call "Left.of()", use "Either.of()" instead')
   }
@@ -74,7 +71,6 @@ export class Left<L> extends Either<L, void> {
 }
 
 export class Right<R> extends Either<void, R> {
-
   static of (): never {
     throw new Error('Cannot call "Right.of()", use "Either.of()" instead')
   }
