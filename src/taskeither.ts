@@ -1,9 +1,8 @@
 import Either, { Left, Right } from './either'
 import { left } from './helpers'
-import Task, {TTaskCallback} from './task'
+import Task, { TTaskCallback } from './task'
 
 export default class TaskEither<A = any, B = any> extends Task {
-
   static of <B = any> (b: B) {
     const taskDefault: TTaskCallback = (_, resolve) => resolve(Either.of(b))
     return new TaskEither(taskDefault)
@@ -27,13 +26,25 @@ export default class TaskEither<A = any, B = any> extends Task {
 
   static fromPromise <A = any, B = any> (promise: Promise<B>) {
     return new Task((_, resolve) => promise
-                    .then((b: B) => resolve(Either.of(b)))
-                    .catch((a: A) => resolve(left(a))))
+      .then((b: B) => resolve(Either.of(b)))
+      .catch((a: A) => resolve(left(a))))
   }
-
 
   static fromEither (m: Left<any> | Right<any>) {
     return new TaskEither((_, resolve) => resolve(m))
+  }
+
+  static fromTask (t: Task<any>) {
+    const fork = t.fork
+    const cleanup = t.cleanup
+
+    return new TaskEither(
+      (reject, resolve) => fork(
+        (a) => reject(left(a)),
+        (b) => resolve(Either.of(b))
+      ),
+      cleanup
+    )
   }
 
   static runIfValid (x: TaskEither | Left<any> | Error): Left<any> | Error | Promise<Left<any> | Right<any>> {
