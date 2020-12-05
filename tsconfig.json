@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "declaration": true,
+    "outDir": "dist",
     "target": "es5",
     "lib": [
       "dom",
@@ -23,7 +25,7 @@
     "pretty": true
   },
   "include": [
-    "."
+    "./src"
   ],
   "exclude": [
     "docs"
