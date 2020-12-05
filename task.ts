@@ -112,8 +112,8 @@ export default class Task<A = any, B = any> extends Monad {
       (reject, resolve) => fork(
         reject,
         (b) => {
-          if (Monad.$valueIsPartialMapCallback<B, B1>(b)) {
-            f(b).fork(reject, resolve)
+          if (Monad.$valueIsPartialMapCallback<B, Task>(f)) {
+            return f(b).fork(reject, resolve)
           }
 
           throw new TypeError('The value passed to resolve is not a function')

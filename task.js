@@ -87,8 +87,8 @@ var Task = /** @class */ (function (_super) {
         var fork = this.fork;
         var cleanup = this.cleanup;
         return new Task(function (reject, resolve) { return fork(reject, function (b) {
-            if (monad_1.default.$valueIsPartialMapCallback(b)) {
-                f(b).fork(reject, resolve);
+            if (monad_1.default.$valueIsPartialMapCallback(f)) {
+                return f(b).fork(reject, resolve);
             }
             throw new TypeError('The value passed to resolve is not a function');
         }); }, cleanup);
