@@ -1,53 +1,23 @@
-// TODO: replace anys with generics where possible in whole file
-
-import { Left } from './either'
-import Maybe from './maybe'
-import Monad from './monad'
-import Task from './task'
-
-// tslint:disable-next-line:ban-types
-export const pipe = (...fns: Function[]) =>
-    (...args: any[]) => fns.reduce((res, f) => [f.call(null, ...res)], args)[0]
-
-// tslint:disable-next-line:ban-types
-export const partial = (f: Function, firstArg: any) => (...lastArgs: any[]) => f(firstArg, ...lastArgs)
-
-/**
- * curry :: Function -> Function
- */
-export const curry = (f: (...args: any[]) => any) => {
-  const arity = f.length
-  return function $curry (...args: any[]): (...args: any[]) => any {
-    return args.length < arity
-      ? $curry.bind(null, ...args)
-      : f.call(null, ...args)
-  }
+export function curry1<T, U> (op: (t: T) => U, item?: T): U | ((t:T) => U) {
+  return item !== undefined ? op(item) : op
 }
 
-export const identity = (x: any) => x
-export const map = curry((f: () => any, m: Monad) => {
-  return m.map(f)
-})
+// curry with max. three nestable curried function calls (extendable)
+type SubTuple<T extends unknown[], U extends unknown[]> = {
+  [K in keyof T]: Extract<keyof U, K> extends never ?
+    never :
+    T[K] extends U[Extract<keyof U, K>] ?
+    T[K]
+      : never
+}
 
-export const ap = curry((f: () => any, m: Monad) => {
-  return m.ap(f)
-})
-
-export const chain = curry((f: () => any, m: Monad) => {
-  return m.chain(f)
-})
-
-export const fold = curry((f1: () => any, f2: () => any, t: Task) => {
-  return t.fold(f1, f2)
-})
-
-interface IGenericObject { [key: string]: any }
-export const prop = curry((x: string, y: IGenericObject) => y[x])
-
-export const left = (a: any) => new Left(a)
-
-export const nothing = Maybe.of(null)
-
-export const reject = (a: any) => Task.rejected(a)
-
-export const either = curry((f,g,e) => e.isLeft ? f(e.$value) : g(e.$value))
+export declare function curry<T extends unknown[], R>(fn: (...ts: T) => R):
+  <U extends unknown[]>(...args: SubTuple<U, T>) => ((...ts: T) => R) extends ((...args: [...U, ...infer V]) => R) ?
+    V['length'] extends 0 ? R :
+    <W extends unknown[]>(...args: SubTuple<W, V>) => ((...ts: V) => R) extends ((...args: [...W, ...infer X]) => R) ?
+      X['length'] extends 0 ? R :
+      <Y extends unknown[]>(...args: SubTuple<Y, X>) => ((...ts: X) => R) extends ((...args: [...Y, ...infer Z]) => R) ?
+        Z['length'] extends 0 ? R : never
+        : never
+      : never
+    : never
