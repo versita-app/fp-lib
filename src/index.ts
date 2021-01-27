@@ -1,7 +1,5 @@
 export {default as Either} from './either'
 export * from './helpers'
-export {default as List} from './list'
-export * from './localstorage'
 export {default as Maybe} from './maybe'
 export {default as Monad} from './monad'
 export {default as Task} from './task'
