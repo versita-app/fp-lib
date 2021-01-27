@@ -1,13 +1,32 @@
 {
   "name": "@versita/fp-lib",
-  "version": "2.0.0",
+  "version": "2.0.6",
   "description": "FP library",
-  "main": "dist/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/es/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc -p ./tsconfig.json",
-    "prepublish": "npm run build"
+    "ts:cjs": "yarn tsc -p ts/cjs.tsconfig.json",
+    "ts:es": "yarn tsc -p ts/es.tsconfig.json",
+    "ts:typedefs": "yarn tsc -p ts/types.tsconfig.json && mv defs/* ./ && rmdir defs",
+    "ts:all": "yarn ts:cjs && yarn ts:es && yarn ts:typedefs",
+    "build": "yarn clean && yarn ts:all",
+    "clean": "rimraf ./*.d.ts ./*.d.ts.map dist ./types",
+    "doc": "./scripts/build-docs",
+    "lint": "yarn eslint src/*.ts test/*.ts",
+    "prepublishOnly": "yarn test && yarn build",
+    "postpublish": "yarn clean",
+    "preversion": "./scripts/build-docs && git add docs",
+    "test": "jest --passWithNoTests",
+    "tdd": "jest --watch"
   },
+  "files": [
+    "*.d.ts",
+    "*.d.ts.map",
+    "dist",
+    "src",
+    "ember-addon.js"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/versita-app/fp-lib.git"
@@ -26,6 +45,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.7.0",
     "@typescript-eslint/parser": "^4.7.0",
+    "@types/jest": "^26.0.19",
     "eslint": "^7.13.0",
     "eslint-config-standard": "^16.0.1",
     "eslint-plugin-import": "^2.22.1",
@@ -34,6 +54,48 @@
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-standard": "^4.1.0",
     "typedoc": "^0.19.2",
+    "rimraf": "^2.6.2",
+    "jest": "^26.6.3",
+    "expect-type": "^0.11.0",
+    "shelljs": "^0.8.2",
+    "ts-jest": "^26.4.4",
     "typescript": "^4.0.5"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "/test(\\/|\\\\).*\\.test\\.ts$",
+    "moduleFileExtensions": [
+      "js",
+      "ts"
+    ],
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/\\.node_modules/",
+      "src/index.ts",
+      "\\.+\\.d\\.ts"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "functions": 100,
+        "statements": 100,
+        "lines": 100
+      }
+    },
+    "globals": {
+      "ts-jest": {
+        "diagnostics": {
+          "ignoreCodes": [
+            151001
+          ]
+        }
+      }
+    }
   }
 }

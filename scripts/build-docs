@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+rm -rf docs && \
+  ./node_modules/.bin/typedoc \
+    --out docs \
+    --includes src \
+    --tsconfig ts/doc.tsconfig.json \
+    src && \
+  touch docs/.nojekyll && \
+echo "fp-lib.versita.io" > docs/CNAME
