@@ -1,36 +1,23 @@
-import { MapCallback, PartialMapCallback } from './types/common'
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { MapCallback } from './types/common'
 
 export default abstract class Monad {
-
   $value: any
 
   // tslint:disable ban-types
-  abstract map (_: Function): any
+  abstract map (_: any): any
 
   abstract ap (_: any): any
 
-  abstract chain (_: Function): any
+  abstract chain (_: any): any
   // tslint:enable ban-types
 
-  protected static $valueIsMapCallback<T, U> (fn: any): fn is MapCallback<T, U> {
+  static $valueIsMapCallback<T, U> (fn: unknown): fn is MapCallback<T, U> {
     if (typeof fn === 'function') {
       return true
     }
 
     return false
-  }
-
-  protected static $valueIsPartialMapCallback<T, U> (fn: any): fn is PartialMapCallback<T, U> {
-    if (typeof fn === 'function') {
-      return true
-    }
-
-    return false
-  }
-
-  // tslint:disable-next-line:no-console
-  inspect (f = console.log) {
-    f(`${this.constructor.name}:`, this.$value)
-    return this
   }
 }
