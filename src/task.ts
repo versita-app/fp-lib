@@ -1,125 +1,174 @@
-import { PartialMapCallback } from './types/common'
+import { MapCallback } from './types/common'
+import { curry1 } from './helpers'
 import Monad from './monad'
 
-export type TTaskReject <A = any> = (a?: A) => void
-export type TTaskResolve <B = any> = (b?: B) => void
-export type TTaskCleanup <C = any> = (c?: C) => void
-export type TTaskCallback <A = any, B = any> = (reject: TTaskReject<A>, resolve: TTaskResolve<B>) => any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type TaskReject = (e: any) => void
+export type TaskResolve <T> = (res: T) => void
+export type TaskCallback <T> = (reject: TaskReject, resolve: TaskResolve<T>) => void
 
-export default class Task<A = any, B = any> extends Monad {
+type MatcherFnA<E> = (e?: string | Error) => E
+type MatcherFnB<T, T1> = (res: T) => T1
+type Matcher<E, T, T1> = [MatcherFnA<E>, MatcherFnB<T, T1>]
 
-  static of <B = any> (b: B) {
-    const taskDefault: TTaskCallback = (_, resolve) => resolve(b)
-    return new Task(taskDefault)
+export default class Task<T> extends Monad {
+  static of <T> (res: T): Task<T> {
+    return of(res)
   }
 
-  static rejected <A = any> (a: A) {
-    return new Task((reject: TTaskReject) => reject(a))
+  static rejected (e?: string | Error): Task<never> {
+    return reject(e)
   }
 
-  static fromPromise <T = any> (promise: Promise<T>) {
-    return new Task((reject, resolve) => promise.then(resolve).catch(reject))
+  static fromPromise <T> (promise: Promise<T>): Task<T> {
+    return fromPromise(promise)
   }
 
-  fork: TTaskCallback<A, B>
-  cleanup: TTaskCleanup
+  fork: TaskCallback<T>
 
-  constructor (computation: TTaskCallback<A, B>, cleanup?: TTaskCleanup) {
+  constructor (computation: TaskCallback<T>) {
     super()
     this.fork = computation
-    this.cleanup = cleanup || (() => undefined)
   }
 
-  run () {
-    return new Promise((resolve, reject) => this.fork(reject, resolve)) as Promise<A | B>
+  run (this: Task<T>): Promise<T> {
+    return run<T>(this)
   }
 
-  /**
-   * Returns a task that will never resolve
-   */
-  empty () {
-    return new Task(() => undefined)
+  empty (): Task<never> {
+    return empty()
   }
 
-  /**
-   * Transforms a failure value into a new Task[a, b]. Does nothing if the
-   * structure already contains a successful value.
-   */
-  orElse <A1 = any> (f: (a?: A) => Task) {
-    const fork = this.fork
-    const cleanup = this.cleanup
+  orElse <U> (this: Task<T>, f: (e?: string | Error) => Task<U>): Task<T | U> {
+    return orElse<T, U>(f, this)
+  }
 
-    return new Task<A1, B>(
-      (reject, resolve) => fork(
-        (a) => f(a).fork(reject, resolve),
-        resolve
-      ),
-      cleanup
+  fold <E, T1> (this: Task<T>, matcher: Matcher<E, T, T1>): Task<E | T1> {
+    return fold<E, T, T1>(matcher, this)
+  }
+
+  map <T1> (this: Task<T>, f: MapCallback<T, T1>): Task<T1> {
+    return map<T, T1>(f, this)
+  }
+
+  ap <T1> (this: Task<T>, task: Task<never>): Task<T1> {
+    return ap<T, T1>(task, this)
+  }
+
+  chain <T1> (this: Task<T>, f: (f: MapCallback<T, T1>) => Task<T1>): Task<T1> {
+    return chain<T, T1>(f, this)
+  }
+}
+
+/**
+ * Creates a Task that will resolve to the specified value
+ */
+export function of<T> (res: T): Task<T> {
+  const taskDefault: TaskCallback<T> = (_, resolve) => resolve(res)
+  return new Task(taskDefault)
+}
+
+export const reject = (e?: string | Error): Task<never> => Task.rejected(e)
+
+/**
+ * Creates a Task from a Promise
+ */
+export function fromPromise <T> (promise: Promise<T>): Task<T> {
+  return new Task((reject: TaskReject, resolve: TaskResolve<T>) => promise.then(resolve).catch(reject))
+}
+
+/**
+ * Wraps task.fork() in a promise
+ */
+export function run <T> (task: Task<T>): Promise<T> {
+  return new Promise((resolve: TaskResolve<T>, reject: TaskReject) => task.fork(reject, resolve))
+}
+
+/**
+ * Returns a task that will never resolve
+ */
+export function empty (): Task<never> {
+  return new Task(() => undefined)
+}
+
+/**
+ * Transforms a failure value into a new Task. Does nothing if the
+ * structure already contains a successful value.
+ */
+export function orElse <T, U> (f: (e?: string | Error) => Task<U>, task: Task<T>): Task<T | U>
+export function orElse <T, U> (f: (e?: string | Error) => Task<U>): (task: Task<T>) => Task<T | U>
+export function orElse <T, U> (f: (e?: string | Error) => Task<U>, task?: Task<T>): Task<T | U> | ((task: Task<T>) => Task<T | U>) {
+  const op = (t: Task<T>) => new Task<T | U>(
+    (reject, resolve) => t.fork(
+      (e?: string | Error) => f(e).fork(reject, resolve),
+      resolve
     )
-  }
+  )
+  return curry1(op, task)
+}
 
-  /**
-   * Takes two functions, applies the leftmost one to the failure value
-   * and the rightmost one to the successful value depending on which
-   * one is present
-   */
-  fold <A1 = any, B1 = any> (fa: (a?: A) => any, fb: (b?: B) => B1) {
-    const fork = this.fork
-    const cleanup = this.cleanup
-
-    return new Task<A1, B1>(
-      (_, resolve) => fork(
-        (a) => resolve(fa(a)),
-        (b) => resolve(fb(b))
-      ),
-      cleanup
+/**
+ * Takes two functions, applies the leftmost one to the failure value
+ * and the rightmost one to the successful value depending on which
+ * one is present
+ */
+export function fold <E, T, T1> (matcher: Matcher<E, T, T1>, task: Task<T>): Task<E | T1>
+export function fold <E, T, T1> (matcher: Matcher<E, T, T1>): (task: Task<T>) => Task<E | T1>
+export function fold <E, T, T1> (matcher: Matcher<E, T, T1>, task?: Task<T>): Task<E | T1> | ((task: Task<T>) => Task<E | T1>) {
+  const [fa, fb] = matcher
+  const op = (t: Task<T>) => new Task<E | T1>(
+    (_, resolve) => t.fork(
+      (e) => resolve(fa(e)),
+      (b) => resolve(fb(b))
     )
-  }
+  )
+  return curry1(op, task)
+}
 
-  /**
-   * Transforms the successful value of the task
-   * using a regular unary function
-   */
-  map <B1 = any> (f: PartialMapCallback<B, B1>) {
-    const fork = this.fork
-    const cleanup = this.cleanup
-
-    return new Task<A, B1>(
-      (reject, resolve) => fork(
-        reject,
-        (b) => resolve(f(b))
-      ),
-      cleanup
+/**
+ * Transforms the successful value of the task
+ * using a regular unary function
+ */
+export function map <T, T1> (f: MapCallback<T, T1>, task: Task<T>): Task<T1>
+export function map <T, T1> (f: MapCallback<T, T1>): (task: Task<T>) => Task<T1>
+export function map <T, T1> (f: MapCallback<T, T1>, task?: Task<T>): Task<T1> | ((task: Task<T>) => Task<T1>) {
+  const op = (t: Task<T>) => new Task<T1>(
+    (reject, resolve) => t.fork(
+      reject,
+      (b) => resolve(f(b))
     )
-  }
+  )
+  return curry1(op, task)
+}
 
-  /**
-   * Apply the successful value of one task to another
-   */
-  ap <B1 = any> (task: Task): Task<A, B1> {
-    return this.chain<B1>(task.map)
-  }
+/**
+ * Apply the successful value of one task to another
+ */
+export function ap <T, T1> (task2: Task<never>, task: Task<T>): Task<T1>
+export function ap <T, T1> (task2: Task<never>): (task: Task<T>) => Task<T1>
+export function ap <T, T1> (task2: Task<never>, task?: Task<T>): Task<T1> | ((task: Task<T>) => Task<T1>) {
+  const op = (t: Task<T>) => t.chain<T1>(task2.map)
+  return curry1(op, task)
+}
 
-  /**
-   * Transforms the successful value of the task
-   * using a function to a monad
-   */
-  chain <B1 = any> (f: (f: PartialMapCallback<B, B1>) => Task<A, B1>) {
-    const fork = this.fork
-    const cleanup = this.cleanup
-
-    return new Task<A, B1>(
-      (reject, resolve) => fork(
-        reject,
-        (b) => {
-          if (Monad.$valueIsPartialMapCallback<B, Task>(f)) {
-            return f(b).fork(reject, resolve)
-          }
-
-          throw new TypeError('The value passed to resolve is not a function')
+/**
+ * Transforms the successful value of the task
+ * and joins the Tasks
+ */
+export function chain <T, T1> (f: (f: MapCallback<T, T1>) => Task<T1>, task: Task<T>): Task<T1>
+export function chain <T, T1> (f: (f: MapCallback<T, T1>) => Task<T1>): (task: Task<T>) => Task<T1>
+export function chain <T, T1> (f: (f: MapCallback<T, T1>) => Task<T1>, task?: Task<T>): Task<T1> | ((task: Task<T>) => Task<T1>) {
+  const op = (t: Task<T>) => new Task<T1>(
+    (reject, resolve) => t.fork(
+      reject,
+      (b) => {
+        if (Monad.$valueIsMapCallback<T, Task<T1>>(f)) {
+          return f(b).fork(reject, resolve)
         }
-      ),
-      cleanup
+
+        throw new TypeError('The value passed to resolve is not a function')
+      }
     )
-  }
+  )
+  return curry1(op, task)
 }
