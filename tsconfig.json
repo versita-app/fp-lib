@@ -12,6 +12,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
+    "strictNullChecks": true,
     "allowSyntheticDefaultImports": true,
     "strictPropertyInitialization": false,
     "strict": true,
