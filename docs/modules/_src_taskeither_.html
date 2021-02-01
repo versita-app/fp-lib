@@ -93,7 +93,7 @@
 								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="_src_taskeither_.html#fromtask" class="tsd-kind-icon">from<wbr>Task</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="_src_taskeither_.html#map" class="tsd-kind-icon">map</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="_src_taskeither_.html#of" class="tsd-kind-icon">of</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="_src_taskeither_.html#rejected" class="tsd-kind-icon">rejected</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="_src_taskeither_.html#reject" class="tsd-kind-icon">reject</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="_src_taskeither_.html#run" class="tsd-kind-icon">run</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="_src_taskeither_.html#runifvalid" class="tsd-kind-icon">run<wbr>IfValid</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="_src_taskeither_.html#trycatch" class="tsd-kind-icon">try<wbr>Catch</a></li>
@@ -110,7 +110,7 @@
 					<div class="tsd-signature tsd-kind-icon">Task<wbr>Either<wbr>Callback&lt;L, R&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>resolve<span class="tsd-signature-symbol">: </span><a href="_src_taskeither_.html#taskeitherresolve" class="tsd-signature-type">TaskEitherResolve</a><span class="tsd-signature-symbol">&lt;</span><a href="_src_either_.html#either" class="tsd-signature-type">Either</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/6f2c079/src/taskeither.ts#L8">src/taskeither.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/taskeither.ts#L9">src/taskeither.ts:9</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -150,7 +150,7 @@
 					<div class="tsd-signature tsd-kind-icon">Task<wbr>Either<wbr>Resolve&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/6f2c079/src/taskeither.ts#L7">src/taskeither.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/taskeither.ts#L8">src/taskeither.ts:8</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -188,14 +188,14 @@
 					<a name="ap" class="tsd-anchor"></a>
 					<h3>ap</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">ap&lt;L, R2, R3&gt;<span class="tsd-signature-symbol">(</span>task2<span class="tsd-signature-symbol">: </span><a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R2</span><span class="tsd-signature-symbol">&gt;</span>, taskeither<span class="tsd-signature-symbol">: </span><a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">(</span>r<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">R2</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">ap&lt;L, R2, R3&gt;<span class="tsd-signature-symbol">(</span>task2<span class="tsd-signature-symbol">: </span><a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R2</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>taskeither<span class="tsd-signature-symbol">: </span><a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">(</span>r<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">R2</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">ap&lt;L, R2, R3&gt;<span class="tsd-signature-symbol">(</span>task2<span class="tsd-signature-symbol">: </span><a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R2</span><span class="tsd-signature-symbol">&gt;</span>, taskeither<span class="tsd-signature-symbol">: </span><a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">(</span>r<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">R2</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TypeError</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">ap&lt;L, R2, R3&gt;<span class="tsd-signature-symbol">(</span>task2<span class="tsd-signature-symbol">: </span><a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R2</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>taskeither<span class="tsd-signature-symbol">: </span><a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">(</span>r<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">R2</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TypeError</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/6f2c079/src/taskeither.ts#L172">src/taskeither.ts:172</a></li>
+									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/taskeither.ts#L193">src/taskeither.ts:193</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -218,18 +218,18 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>task2: <a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R2</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>task2: <a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R2</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
 									<h5>taskeither: <a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">(</span>r<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">R2</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TypeError</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/6f2c079/src/taskeither.ts#L173">src/taskeither.ts:173</a></li>
+									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/taskeither.ts#L194">src/taskeither.ts:194</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -247,14 +247,14 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>task2: <a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R2</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>task2: <a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R2</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>taskeither<span class="tsd-signature-symbol">: </span><a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">(</span>r<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">R2</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>taskeither<span class="tsd-signature-symbol">: </span><a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">(</span>r<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">R2</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TypeError</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span></h4>
 							<ul class="tsd-parameters">
 								<li class="tsd-parameter-signature">
 									<ul class="tsd-signatures tsd-kind-type-literal">
-										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>taskeither<span class="tsd-signature-symbol">: </span><a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">(</span>r<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">R2</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span></li>
+										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>taskeither<span class="tsd-signature-symbol">: </span><a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">(</span>r<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">R2</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TypeError</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span></li>
 									</ul>
 									<ul class="tsd-descriptions">
 										<li class="tsd-description">
@@ -264,7 +264,7 @@
 													<h5>taskeither: <a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">(</span>r<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">R2</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span></h5>
 												</li>
 											</ul>
-											<h4 class="tsd-returns-title">Returns <a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span></h4>
+											<h4 class="tsd-returns-title">Returns <a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TypeError</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span></h4>
 										</li>
 									</ul>
 								</li>
@@ -283,7 +283,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/6f2c079/src/taskeither.ts#L158">src/taskeither.ts:158</a></li>
+									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/taskeither.ts#L179">src/taskeither.ts:179</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -319,7 +319,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/6f2c079/src/taskeither.ts#L159">src/taskeither.ts:159</a></li>
+									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/taskeither.ts#L180">src/taskeither.ts:180</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -372,7 +372,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/6f2c079/src/taskeither.ts#L105">src/taskeither.ts:105</a></li>
+									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/taskeither.ts#L126">src/taskeither.ts:126</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -409,7 +409,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/6f2c079/src/taskeither.ts#L96">src/taskeither.ts:96</a></li>
+									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/taskeither.ts#L117">src/taskeither.ts:117</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -446,7 +446,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/6f2c079/src/taskeither.ts#L112">src/taskeither.ts:112</a></li>
+									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/taskeither.ts#L133">src/taskeither.ts:133</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -484,7 +484,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/6f2c079/src/taskeither.ts#L142">src/taskeither.ts:142</a></li>
+									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/taskeither.ts#L163">src/taskeither.ts:163</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -520,7 +520,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/6f2c079/src/taskeither.ts#L143">src/taskeither.ts:143</a></li>
+									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/taskeither.ts#L164">src/taskeither.ts:164</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -573,7 +573,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/6f2c079/src/taskeither.ts#L66">src/taskeither.ts:66</a></li>
+									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/taskeither.ts#L87">src/taskeither.ts:87</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -598,16 +598,16 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-					<a name="rejected" class="tsd-anchor"></a>
-					<h3>rejected</h3>
+					<a name="reject" class="tsd-anchor"></a>
+					<h3>reject</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">rejected&lt;L&gt;<span class="tsd-signature-symbol">(</span>l<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">never</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">reject&lt;L&gt;<span class="tsd-signature-symbol">(</span>l<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_src_taskeither_.taskeither.html" class="tsd-signature-type">TaskEither</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">never</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/6f2c079/src/taskeither.ts#L74">src/taskeither.ts:74</a></li>
+									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/taskeither.ts#L95">src/taskeither.ts:95</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -641,7 +641,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/6f2c079/src/taskeither.ts#L133">src/taskeither.ts:133</a></li>
+									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/taskeither.ts#L154">src/taskeither.ts:154</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -672,13 +672,13 @@
 					<a name="runifvalid" class="tsd-anchor"></a>
 					<h3>run<wbr>IfValid</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">run<wbr>IfValid&lt;L, R&gt;<span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_src_either_.html#either" class="tsd-signature-type">Either</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">run<wbr>IfValid&lt;L, R&gt;<span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">x</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_src_either_.html#either" class="tsd-signature-type">Either</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/6f2c079/src/taskeither.ts#L124">src/taskeither.ts:124</a></li>
+									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/taskeither.ts#L145">src/taskeither.ts:145</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -701,7 +701,7 @@
 									<h5>x: <span class="tsd-signature-type">unknown</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_src_either_.html#either" class="tsd-signature-type">Either</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">x</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_src_either_.html#either" class="tsd-signature-type">Either</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -715,7 +715,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/6f2c079/src/taskeither.ts#L82">src/taskeither.ts:82</a></li>
+									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/taskeither.ts#L103">src/taskeither.ts:103</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -842,7 +842,7 @@
 						<a href="_src_taskeither_.html#of" class="tsd-kind-icon">of</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="_src_taskeither_.html#rejected" class="tsd-kind-icon">rejected</a>
+						<a href="_src_taskeither_.html#reject" class="tsd-kind-icon">reject</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="_src_taskeither_.html#run" class="tsd-kind-icon">run</a>

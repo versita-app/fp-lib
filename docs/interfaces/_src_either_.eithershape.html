@@ -104,10 +104,11 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-inherited tsd-is-not-exported">
+						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported"><a href="_src_either_.eithershape.html#_value" class="tsd-kind-icon">$value</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="_src_either_.eithershape.html#variant" class="tsd-kind-icon">variant</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-not-exported">
@@ -119,13 +120,15 @@
 								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="_src_either_.eithershape.html#isleft" class="tsd-kind-icon">is<wbr>Left</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="_src_either_.eithershape.html#isright" class="tsd-kind-icon">is<wbr>Right</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-overwrite tsd-is-not-exported"><a href="_src_either_.eithershape.html#map" class="tsd-kind-icon">map</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="_src_either_.eithershape.html#tojson" class="tsd-kind-icon">toJSON</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="_src_either_.eithershape.html#tostring" class="tsd-kind-icon">to<wbr>String</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-inherited tsd-is-static tsd-is-not-exported"><a href="_src_either_.eithershape.html#_valueismapcallback" class="tsd-kind-icon">$value<wbr>IsMap<wbr>Callback</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-inherited tsd-is-not-exported">
+			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
 					<a name="_value" class="tsd-anchor"></a>
@@ -134,7 +137,17 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="../classes/_src_monad_.monad.html">Monad</a>.<a href="../classes/_src_monad_.monad.html#_value">$value</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/6f2c079/src/monad.ts#L6">src/monad.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/monad.ts#L6">src/monad.ts:6</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="variant" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> variant</h3>
+					<div class="tsd-signature tsd-kind-icon">variant<span class="tsd-signature-symbol">:</span> <a href="../enums/_src_either_.eithervariant.html" class="tsd-signature-type">EitherVariant</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/either.ts#L31">src/either.ts:31</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -145,14 +158,14 @@
 					<a name="ap" class="tsd-anchor"></a>
 					<h3>ap</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-overwrite tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">ap&lt;R2, R3&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="../modules/_src_either_.html#either" class="tsd-signature-type">Either</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">(</span>r<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">R2</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span>, either2<span class="tsd-signature-symbol">: </span><a href="../modules/_src_either_.html#either" class="tsd-signature-type">Either</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R2</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/_src_either_.html#either" class="tsd-signature-type">Either</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">ap&lt;R2, R3&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="../modules/_src_either_.html#either" class="tsd-signature-type">Either</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">(</span>r<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">R2</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span>, either2<span class="tsd-signature-symbol">: </span><a href="../modules/_src_either_.html#either" class="tsd-signature-type">Either</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R2</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/_src_either_.html#either" class="tsd-signature-type">Either</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="../classes/_src_either_.left.html" class="tsd-signature-type">Left</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TypeError</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides <a href="../classes/_src_monad_.monad.html">Monad</a>.<a href="../classes/_src_monad_.monad.html#ap">ap</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/6f2c079/src/either.ts#L24">src/either.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/either.ts#L39">src/either.ts:39</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -173,7 +186,7 @@
 									<h5>either2: <a href="../modules/_src_either_.html#either" class="tsd-signature-type">Either</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R2</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../modules/_src_either_.html#either" class="tsd-signature-type">Either</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../modules/_src_either_.html#either" class="tsd-signature-type">Either</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="../classes/_src_either_.left.html" class="tsd-signature-type">Left</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TypeError</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -188,7 +201,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="../classes/_src_monad_.monad.html">Monad</a>.<a href="../classes/_src_monad_.monad.html#chain">chain</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/6f2c079/src/either.ts#L23">src/either.ts:23</a></li>
+									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/either.ts#L38">src/either.ts:38</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -238,7 +251,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/6f2c079/src/either.ts#L21">src/either.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/either.ts#L34">src/either.ts:34</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -273,7 +286,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/6f2c079/src/either.ts#L19">src/either.ts:19</a></li>
+									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/either.ts#L32">src/either.ts:32</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -296,7 +309,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/6f2c079/src/either.ts#L20">src/either.ts:20</a></li>
+									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/either.ts#L33">src/either.ts:33</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -320,7 +333,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="../classes/_src_monad_.monad.html">Monad</a>.<a href="../classes/_src_monad_.monad.html#map">map</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/6f2c079/src/either.ts#L22">src/either.ts:22</a></li>
+									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/either.ts#L37">src/either.ts:37</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -342,6 +355,52 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="tojson" class="tsd-anchor"></a>
+					<h3>toJSON</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">toJSON<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="../modules/_src_either_.html#either" class="tsd-signature-type">Either</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/_src_either_.html#eitherjson" class="tsd-signature-type">EitherJSON</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/either.ts#L35">src/either.ts:35</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>this: <a href="../modules/_src_either_.html#either" class="tsd-signature-type">Either</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../modules/_src_either_.html#eitherjson" class="tsd-signature-type">EitherJSON</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="tostring" class="tsd-anchor"></a>
+					<h3>to<wbr>String</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">to<wbr>String<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="../modules/_src_either_.html#either" class="tsd-signature-type">Either</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/either.ts#L36">src/either.ts:36</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>this: <a href="../modules/_src_either_.html#either" class="tsd-signature-type">Either</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">L</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-inherited tsd-is-static tsd-is-not-exported">
 					<a name="_valueismapcallback" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> $value<wbr>IsMap<wbr>Callback</h3>
@@ -353,7 +412,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="../classes/_src_monad_.monad.html">Monad</a>.<a href="../classes/_src_monad_.monad.html#_valueismapcallback">$valueIsMapCallback</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/6f2c079/src/monad.ts#L16">src/monad.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/versita-app/fp-lib/blob/30ea8df/src/monad.ts#L16">src/monad.ts:16</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -428,6 +487,9 @@
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
 								<a href="_src_either_.eithershape.html#_value" class="tsd-kind-icon">$value</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="_src_either_.eithershape.html#variant" class="tsd-kind-icon">variant</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-overwrite tsd-is-not-exported">
 								<a href="_src_either_.eithershape.html#ap" class="tsd-kind-icon">ap</a>
 							</li>
@@ -446,6 +508,12 @@
 							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-overwrite tsd-is-not-exported">
 								<a href="_src_either_.eithershape.html#map" class="tsd-kind-icon">map</a>
 							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="_src_either_.eithershape.html#tojson" class="tsd-kind-icon">toJSON</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="_src_either_.eithershape.html#tostring" class="tsd-kind-icon">to<wbr>String</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-inherited tsd-is-static tsd-is-not-exported">
 								<a href="_src_either_.eithershape.html#_valueismapcallback" class="tsd-kind-icon">$value<wbr>IsMap<wbr>Callback</a>
 							</li>
@@ -453,10 +521,19 @@
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
+						<a href="_src_either_.leftjson.html" class="tsd-kind-icon">LeftJSON</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
+						<a href="_src_either_.rightjson.html" class="tsd-kind-icon">RightJSON</a>
+					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../modules/_src_either_.html#either" class="tsd-kind-icon">Either</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
+						<a href="../modules/_src_either_.html#eitherjson" class="tsd-kind-icon">EitherJSON</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../modules/_src_either_.html#matcher" class="tsd-kind-icon">Matcher</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
@@ -471,6 +548,9 @@
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../modules/_src_either_.html#fold" class="tsd-kind-icon">fold</a>
 					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_src_either_.html#get" class="tsd-kind-icon">get</a>
+					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="../modules/_src_either_.html#isleft" class="tsd-kind-icon">is<wbr>Left</a>
 					</li>
@@ -478,13 +558,19 @@
 						<a href="../modules/_src_either_.html#isright" class="tsd-kind-icon">is<wbr>Right</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/_src_either_.html#left-1" class="tsd-kind-icon">left</a>
+						<a href="../modules/_src_either_.html#left-2" class="tsd-kind-icon">left</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../modules/_src_either_.html#map" class="tsd-kind-icon">map</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../modules/_src_either_.html#of" class="tsd-kind-icon">of</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_src_either_.html#tojson" class="tsd-kind-icon">toJSON</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_src_either_.html#tostring" class="tsd-kind-icon">to<wbr>String</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../modules/_src_either_.html#trycatch" class="tsd-kind-icon">try<wbr>Catch</a>
@@ -512,6 +598,7 @@
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
