@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Either, { left } from './either'
 import { curry1 } from './helpers'
 import { MapCallback } from './types/common'
@@ -12,8 +13,8 @@ export default class TaskEither<L, R> extends Monad {
     return of(r)
   }
 
-  static rejected <L> (l: L): TaskEither<L, never> {
-    return rejected(l)
+  static reject <L> (l: L): TaskEither<L, never> {
+    return reject(l)
   }
 
   static tryCatch <L, R> (f: () => Promise<R> | R, e: (l: Error) => L): TaskEither<L, R> {
@@ -32,8 +33,24 @@ export default class TaskEither<L, R> extends Monad {
     return fromTask<L, R>(task)
   }
 
+  static run <L, R> (taskeither: TaskEither<L, R>): Promise<Either<L, R>> {
+    return new Promise(taskeither.computation)
+  }
+
   static runIfValid<L, R> (x: unknown): typeof x | Promise<Either<L, R>> {
     return runIfValid<L, R>(x)
+  }
+
+  static map <L, R, R2> (f: MapCallback<R, R2>, taskeither: TaskEither<L, R>): TaskEither<L, R2> {
+    return map<L, R, R2>(f, taskeither)
+  }
+
+  static chain <L, R, R2 = R> (f: MapCallback<R, TaskEither<L, R2>>, taskeither: TaskEither<L, R>): TaskEither<L, R2> {
+    return chain<L, R, R2>(f, taskeither)
+  }
+
+  static ap <L, R2, R3> (task2: TaskEither<L, R2>, taskeither: TaskEither<L, (r: R2) => R3>): TaskEither<L | TypeError, R3> {
+    return ap< L, R2, R3>(task2, taskeither)
   }
 
   computation: TaskEitherCallback<L, R>
@@ -47,6 +64,10 @@ export default class TaskEither<L, R> extends Monad {
     return run<L, R>(this)
   }
 
+  runIfValid<L, R> (this: TaskEither<L, R>): Promise<Either<L, R>> | Promise<unknown> {
+    return runIfValid<L, R>(this)
+  }
+
   map <R2> (this: TaskEither<L, R>, f: MapCallback<R, R2>): TaskEither<L, R2> {
     return map<L, R, R2>(f, this)
   }
@@ -55,7 +76,7 @@ export default class TaskEither<L, R> extends Monad {
     return chain<L, R, R2>(f, this)
   }
 
-  ap <R2, R3> (this: TaskEither<L, (r: R2) => R3>, task2: TaskEither<L, R2>): TaskEither<L, R3> {
+  ap <R2, R3> (this: TaskEither<L, (r: R2) => R3>, task2: TaskEither<L, R2>): TaskEither<L | TypeError, R3> {
     return ap< L, R2, R3>(task2, this)
   }
 }
@@ -71,7 +92,7 @@ export function of <R> (r: R): TaskEither<null, R> {
 /**
  * Creates a TaskEither that will resolve to Left<l>
  */
-export function rejected <L> (l: L): TaskEither<L, never> {
+export function reject <L> (l: L): TaskEither<L, never> {
   const taskDefault: TaskEitherCallback<L, never> = (resolve) => resolve(left(l))
   return new TaskEither(taskDefault)
 }
@@ -121,10 +142,10 @@ export function fromTask <L, R> (task: Task<R>): TaskEither<L, R> {
 /**
  * Invokes the computation if x is a valid TaskEither
  */
-export function runIfValid<L, R> (x: unknown): typeof x | Promise<Either<L, R>> {
+export function runIfValid<L, R> (x: unknown): Promise<typeof x> | Promise<Either<L, R>> {
   return x instanceof TaskEither
     ? new Promise(x.computation)
-    : x
+    : Promise.resolve(x)
 }
 
 /**
@@ -169,9 +190,15 @@ export function chain <L, R, R2> (f: MapCallback<R, TaskEither<L, R2>>, taskeith
 /**
  * Applies the value of one resolved Right to another. Returns first Left enountered (if any)
  */
-export function ap <L, R2, R3> (task2: TaskEither<L, R2>, taskeither: TaskEither<L, (r: R2) => R3>): TaskEither<L, R3>
-export function ap <L, R2, R3> (task2: TaskEither<L, R2>): (taskeither: TaskEither<L, (r: R2) => R3>) => TaskEither<L, R3>
-export function ap <L, R2, R3> (task2: TaskEither<L, R2>, taskeither?: TaskEither<L, (r: R2) => R3>): TaskEither<L, R3> | ((taskeither: TaskEither<L, (r: R2) => R3>) => TaskEither<L, R3>) {
-  const op = (t: TaskEither<L, (r: R2) => R3>) => t.chain(fn => task2.map(fn))
+export function ap <L, R2, R3> (task2: TaskEither<any, R2>, taskeither: TaskEither<L, (r: R2) => R3>): TaskEither<L | TypeError, R3>
+export function ap <L, R2, R3> (task2: TaskEither<any, R2>): (taskeither: TaskEither<L, (r: R2) => R3>) => TaskEither<L | TypeError, R3>
+export function ap <L, R2, R3> (task2: TaskEither<any, R2>, taskeither?: TaskEither<L, (r: R2) => R3>): TaskEither<L | TypeError, R3> | ((taskeither: TaskEither<L, (r: R2) => R3>) => TaskEither<L | TypeError, R3>) {
+  const op = (t: TaskEither<L, (r: R2) => R3>) => t.chain(f => {
+    if (Monad.$valueIsMapCallback<R2, R3>(f)) {
+      return task2.map(f)
+    }
+
+    return reject(TypeError('Either.$value is not a function'))
+  })
   return curry1(op, taskeither)
 }

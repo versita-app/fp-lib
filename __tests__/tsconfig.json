@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.json",
+  "include": ["*.ts"],
+  "compilerOptions": {
+    "paths": {
+      "@versita/fp-lib": ["src"],
+      "@versita/fp-lib/*": ["src/*"]
+    }
+  }
+}

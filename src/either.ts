@@ -6,30 +6,49 @@ import { curry1 } from './helpers'
 import { MapCallback } from './types/common'
 
 type MatcherFn<T, U> = (v: T) => U
-type Matcher<L, A, R, B> = [MatcherFn<L, A>, MatcherFn<R, B>]
+export type Matcher<L, A, R, B> = { Left: MatcherFn<L, A>, Right: MatcherFn<R, B> }
 
 export enum EitherVariant {
   Left = 'Left',
   Right = 'Right',
 }
 
+interface LeftJSON<L> {
+  variant: EitherVariant.Left
+  $value: L
+}
+
+interface RightJSON<R> {
+  variant: EitherVariant.Right
+  $value: R
+}
+
+type EitherJSON<L, R> = LeftJSON<L> | RightJSON<R>
+
 export type Either<L, R> = Left<L> | Right<R>
 
 interface EitherShape<L, R> extends Monad {
+  readonly variant: EitherVariant
   isLeft (this: Either<L, R>): this is Left<L>
   isRight (this: Either<L, R>): this is Right<R>
   fold<L2, R2> (this: Either<L, R>, matcher: Matcher<L, L2, R, R2>): L2 | R2
+  toJSON(this: Either<L, R>): EitherJSON<L, R>
+  toString(this: Either<L, R>): string
   map<R2> (this: Either<L, R>, mapFn: MapCallback<R, R2>): Either<L, R2>
   chain<R2> (this: Either<L, R>, chainFn: (r: R) => Either<L, R2>): Either<L, R2>
-  ap<R2, R3> (this: Either<L, (r: R2) => R3>, either2: Either<L, R2>): Either<L, R3>
+  ap<R2, R3> (this: Either<L, (r: R2) => R3>, either2: Either<L, R2>): Either<L, R3> | Left<TypeError>
 }
 
 export class Left<L> implements EitherShape<L, never> {
   readonly $value: L
-  readonly variant: EitherVariant.Left
+  readonly variant: EitherVariant.Left = EitherVariant.Left
 
   static of (): never {
     throw new Error('Cannot call "Left.of()", use "Either.of()" instead')
+  }
+
+  static get<L, R> (either: Either<L, R>):L | R {
+    return either.$value
   }
 
   constructor (value: L) {
@@ -42,6 +61,18 @@ export class Left<L> implements EitherShape<L, never> {
 
   isRight (this: Either<L, any>): this is Right<never> {
     return false
+  }
+
+  get (this: Either<L, any>): typeof this.$value {
+    return get<L, any>(this)
+  }
+
+  toJSON (this: Either<L, never>): EitherJSON<L, never> {
+    return toJSON(this)
+  }
+
+  toString (this: Either<L, never>): string {
+    return toString(this)
   }
 
   fold<A, B> (matcher: Matcher<L, A, any, B>): A {
@@ -63,18 +94,38 @@ export class Left<L> implements EitherShape<L, never> {
 
 export class Right<R> implements EitherShape<any, R> {
   readonly $value: R
-  readonly variant: EitherVariant.Right
+  readonly variant: EitherVariant.Right = EitherVariant.Right
+
+  static of (): never {
+    throw new Error('Cannot call "Right.of()", use "Either.of()" instead')
+  }
+
+  static get<L, R> (either: Either<L, R>):L | R {
+    return either.$value
+  }
 
   constructor (value: R) {
     this.$value = value
   }
 
-  isLeft (this: Either<any, R>): this is Left<any> {
+  isLeft (this: Either<any, R>): this is Left<never> {
     return false
   }
 
   isRight (this: Either<any, R>): this is Right<R> {
     return true
+  }
+
+  get (this: Either<any, R>): typeof this.$value {
+    return get<any, R>(this)
+  }
+
+  toJSON (this: Either<any, R>): EitherJSON<any, R> {
+    return toJSON(this)
+  }
+
+  toString (this: Either<any, R>): string {
+    return toString(this)
   }
 
   fold<A, B> (matcher: Matcher<any, A, R, B>): B {
@@ -89,12 +140,8 @@ export class Right<R> implements EitherShape<any, R> {
     return chain<any, R, R2>(f, this)
   }
 
-  ap <R2, R3> (this: Either<any, (r: R2) => R3>, either2: Either<any, R2>): Either<any, R3> {
-    if (Monad.$valueIsMapCallback<R2, R3>(this.$value)) {
-      return ap<any, R2, R3>(either2, this)
-    }
-
-    return left<TypeError>(TypeError('Either.$value is not a function'))
+  ap <R2, R3> (this: Either<any, (r: R2) => R3>, either2: Either<any, R2>): Either<any, R3> | Left<TypeError> {
+    return ap<any, R2, R3>(either2, this)
   }
 }
 
@@ -131,10 +178,33 @@ export function isRight (either: Either<any, any>): either is Right<any> {
  */
 export function tryCatch<L, R> (fa: () => R, fb: (e: Error) => L): Left<L> | Right<R> {
   try {
-    return Either.of(fa())
+    return Either.of(fa()) as Right<R>
   } catch (err) {
-    return new Left(fb(err))
+    return new Left(fb(err)) as Left<L>
   }
+}
+
+/**
+ * fetches the value of the Left or Right
+ */
+export function get<L, R> (either: Either<L, R>): L | R {
+  return either.$value
+}
+
+/**
+ * Serialize to string
+ */
+export function toString<L extends { toString (): string }, R extends { toString (): string }>(either: Either<L, R>): string {
+  return `${either.variant}(${either.$value.toString()})`
+}
+
+/**
+ * serialize to JSON representation
+ */
+export function toJSON<L, R> (either: Either<L, R>): EitherJSON<L, R> {
+  return either.isRight()
+    ? { variant: either.variant, $value: either.$value }
+    : { variant: either.variant, $value: either.$value }
 }
 
 /**
@@ -145,10 +215,9 @@ export function tryCatch<L, R> (fa: () => R, fb: (e: Error) => L): Left<L> | Rig
 export function fold <L, L2, R, R2> (matcher: Matcher<L, L2, R, R2>, either: Either<L, R>): L2 | R2
 export function fold <L, L2, R, R2> (matcher: Matcher<L, L2, R, R2>): (either: Either<L, R>) => L2 | R2
 export function fold <L, L2, R, R2> (matcher: Matcher<L, L2, R, R2>, either?: Either<L, R>): L2 | R2 | ((either: Either<L, R>) => L2 | R2) {
-  const [fl, fr] = matcher
   const op = (e: Either<L, R>) => e.isLeft()
-    ? fl(e.$value)
-    : fr(e.$value)
+    ? matcher.Left(e.$value)
+    : matcher.Right(e.$value)
   return curry1(op, either)
 }
 
@@ -159,8 +228,8 @@ export function map <L, R, R2> (f: MapCallback<R, R2>, either: Either<L, R>): Ei
 export function map <L, R, R2> (f: MapCallback<R, R2>): (either: Either<L, R>) => Either<L, R2>
 export function map <L, R, R2> (f: MapCallback<R, R2>, either?: Either<L, R>): Either<L, R2> | ((either: Either<L, R>) => Either<L, R2>) {
   const op = (e: Either<L, R>) => e.isLeft()
-    ? e
-    : of(f(e.$value))
+    ? e as Left<L> as Left<L>
+    : of(f(e.$value)) as Right<R2>
   return curry1(op, either)
 }
 
@@ -182,13 +251,22 @@ export function chain <L, R, R2> (f: (r:R) => Either<L, R2>, either?: Either<L, 
 export function ap <L, R2, R3> (either2: Either<L, R2>, either: Either<L, (r: R2) => R3>): Either<L, R3>
 export function ap <L, R2, R3> (either2: Either<L, R2>): (either: Either<L, (r: R2) => R3>) => Either<L, R3>
 export function ap <L, R2, R3> (either2: Either<L, R2>, either?: Either<L, (r: R2) => R3>): Either<L, R3> | ((either: Either<L, (r: R2) => R3>) => Either<L, R3>) {
-  const op = (e: Either<L, (r: R2) => R3>) => e.isLeft()
-    ? e
-    : either2.map(e.$value)
+  const op = (e: Either<L, (r: R2) => R3>) => {
+    if (e.isLeft()) {
+      return e
+    }
+    if (Monad.$valueIsMapCallback<R2, R3>(e.$value)) {
+      return either2.map(e.$value)
+    }
+    return left(TypeError('Either.$value is not a function'))
+  }
   return curry1(op, either)
 }
 
 export const Either = {
+  get,
+  toJSON,
+  toString,
   of,
   isLeft,
   isRight,

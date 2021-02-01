@@ -11,7 +11,7 @@ export type Maybe<T> = Just<T> | Nothing<T>
 
 interface JustJSON<T> {
   variant: MaybeVariant.Just
-  value: T
+  $value: T
 }
 
 interface NothingJSON {
@@ -35,8 +35,8 @@ interface MaybeShape<T> extends Monad {
   orElse(this: Maybe<T>, orElseFn: () => Maybe<T>): Maybe<T>
   and<U>(this: Maybe<T>, mAnd: Maybe<U>): Maybe<U>
   chain<U>(this: Maybe<T>, chainFn: (t: T) => Maybe<U>): Maybe<U>
-  flatMap<U>(this: Maybe<T>, flatMapFn: (t: T) => Maybe<U>): Maybe<U>
   unsafelyGet(): T | never
+  get<K extends keyof T>(this: Maybe<T>, key: K): Maybe<NonNullable<T[K]>>
   getOrElse<U>(this: Maybe<T>, elseFn: () => U): T | U
   toString(this: Maybe<T>): string
   toJSON(this: Maybe<T>): MaybeJSON<T>
@@ -47,6 +47,10 @@ interface MaybeShape<T> extends Monad {
 export class Just<T> implements MaybeShape<T> {
   readonly variant: MaybeVariant.Just = MaybeVariant.Just
   readonly $value: T
+
+  static get<J> (theJust: Just<J>): J {
+    return theJust.$value
+  }
 
   constructor (value?: T | null) {
     if (value == null) {
@@ -96,12 +100,12 @@ export class Just<T> implements MaybeShape<T> {
     return chain(chainFn, this)
   }
 
-  flatMap<U> (this: Maybe<T>, flatMapFn: (t: T) => Maybe<U>): Maybe<U> {
-    return this.chain(flatMapFn)
-  }
-
   unsafelyGet (): T {
     return this.$value
+  }
+
+  get<K extends keyof T> (this: Maybe<T>, key: K): Maybe<NonNullable<T[K]>> {
+    return this.chain(prop(key))
   }
 
   getOr<U> (this: Maybe<T>, defaultValue: U): T | U {
@@ -180,12 +184,12 @@ export class Nothing<T> implements MaybeShape<T> {
     return chain(chainFn, this)
   }
 
-  flatMap<U> (this: Maybe<T>, flatMapFn: (t: T) => Maybe<U>): Maybe<U> {
-    return this.chain(flatMapFn)
-  }
-
   unsafelyGet (): never {
     throw new Error('Tried to `unsafelyGet(Nothing)`')
+  }
+
+  get<K extends keyof T> (this: Maybe<T>, key: K): Maybe<NonNullable<T[K]>> {
+    return this.chain(prop(key))
   }
 
   getOr<U> (this: Maybe<T>, defaultValue: U): T | U {
@@ -211,10 +215,6 @@ export class Nothing<T> implements MaybeShape<T> {
   ap<A, B> (this: Maybe<(val: A) => B>, val: Maybe<A>): Maybe<B> {
     return ap(this, val)
   }
-
-  get<K extends keyof T> (this: Maybe<T>, key: K): Maybe<NonNullable<T[K]>> {
-    return this.chain(property(key))
-  }
 }
 
 export type Matcher<T, A> = {
@@ -229,13 +229,13 @@ export function toString<T extends { toString (): string }>(maybe: Maybe<T>): st
 
 export function toJSON<T> (maybe: Maybe<T>): MaybeJSON<T> {
   return maybe.isJust()
-    ? { variant: maybe.variant, value: maybe.$value }
+    ? { variant: maybe.variant, $value: maybe.$value }
     : { variant: maybe.variant }
 }
 
-export function property<T, K extends keyof T>(key: K, obj: T): Maybe<NonNullable<T[K]>>
-export function property<T, K extends keyof T>(key: K): (obj: T) => Maybe<NonNullable<T[K]>>
-export function property<T, K extends keyof T> (
+export function prop<T, K extends keyof T>(key: K, obj: T): Maybe<NonNullable<T[K]>>
+export function prop<T, K extends keyof T>(key: K): (obj: T) => Maybe<NonNullable<T[K]>>
+export function prop<T, K extends keyof T> (
   key: K,
   obj?: T
 ): Maybe<NonNullable<T[K]>> | ((obj: T) => Maybe<NonNullable<T[K]>>) {
@@ -270,6 +270,7 @@ export function and<T, U> (
   const op = (m: Maybe<T>) => (m.isJust() ? andMaybe : nothing<U>())
   return curry1(op, maybe)
 }
+
 export function chain<T, U>(thenFn: (t: T) => Maybe<U>, maybe: Maybe<T>): Maybe<U>
 export function chain<T, U>(thenFn: (t: T) => Maybe<U>): (maybe: Maybe<T>) => Maybe<U>
 export function chain<T, U> (
@@ -364,6 +365,15 @@ export function mapOrElse<T, U> (
   }
 }
 
+export function get<T, K extends keyof T>(key: K, maybeObj: Maybe<T>): Maybe<T[K]>;
+export function get<T, K extends keyof T>(key: K): (maybeObj: Maybe<T>) => Maybe<T[K]>;
+export function get<T, K extends keyof T> (
+  key: K,
+  maybeObj?: Maybe<T>
+): Maybe<T[K]> | ((maybeObj: Maybe<T>) => Maybe<T[K]>) {
+  return curry1(chain(prop<T, K>(key)), maybeObj)
+}
+
 export function unsafelyGet<T> (maybe: Maybe<T>): T {
   return maybe.unsafelyGet()
 }
@@ -455,6 +465,7 @@ export const Maybe = {
   or,
   orElse,
   unsafelyGet,
+  get,
   getOr,
   getOrElse,
   toString,
@@ -462,7 +473,7 @@ export const Maybe = {
   fold,
   equals,
   ap,
-  property
+  prop
 }
 
 export default Maybe

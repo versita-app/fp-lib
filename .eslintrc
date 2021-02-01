@@ -1,7 +1,7 @@
 {
   "parser": '@typescript-eslint/parser',
   "parserOptions": {
-    "project": "./tsconfig.json",
+    "project": ["./tsconfig.json", "./__tests__/tsconfig.json"],
     "tsconfigRootDir": "./",
     "ecmaVersion": 2020,
     "ecmaFeatures": {
@@ -32,6 +32,10 @@
 
   "globals": {
     "document": "readonly",
+    "describe": "readonly",
+    "test": "readonly",
+    "jest": "readonly",
+    "expect": "readonly",
     "navigator": "readonly",
     "window": "readonly"
   },
