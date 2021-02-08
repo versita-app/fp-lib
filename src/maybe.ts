@@ -1,5 +1,5 @@
 /* eslint-disable no-use-before-define */
-import { curry1 } from './helpers'
+import { curry1, unsafeProp } from './helpers'
 import Monad from './monad'
 
 export enum MaybeVariant {
@@ -27,6 +27,7 @@ interface MaybeShape<T> extends Monad {
   readonly variant: MaybeVariant
   isJust(this: Maybe<T>): this is Just<T>
   isNothing(this: Maybe<T>): this is Nothing<T>
+  pluck<U>(this: Maybe<T>, prop: string): Maybe<U>
   map<U>(this: Maybe<T>, mapFn: (t: T) => U): Maybe<U>
   mapOr<U>(this: Maybe<T>, orU: U, mapFn: (t: T) => U): U
   mapOrElse<U>(this: Maybe<T>, orElseFn: () => U, mapFn: (t: T) => U): U
@@ -66,6 +67,10 @@ export class Just<T> implements MaybeShape<T> {
 
   isNothing (this: Maybe<T>): this is Nothing<T> {
     return false
+  }
+
+  pluck<U> (this: Maybe<T>, prop: string): Maybe<U> {
+    return pluck(prop, this)
   }
 
   map<U> (this: Maybe<T>, mapFn: (t: T) => U): Maybe<U> {
@@ -150,6 +155,10 @@ export class Nothing<T> implements MaybeShape<T> {
 
   isNothing (this: Maybe<T>): this is Nothing<T> {
     return true
+  }
+
+  pluck<U> (this: Maybe<T>, prop: string): Maybe<U> {
+    return pluck(prop, this)
   }
 
   map<U> (this: Maybe<T>, mapFn: (t: T) => U): Maybe<U> {
@@ -408,6 +417,16 @@ export function ap<T, U> (
   return curry1(op, maybe)
 }
 
+/**
+ * Equivalent to map(prop(x))
+ */
+export function pluck <T, U> (prop: string, maybe: Maybe<T>): Maybe<U>
+export function pluck <T, U> (prop: string): (maybe: Maybe<T>) => Maybe<U>
+export function pluck <T, U> (prop: string, maybe?: Maybe<T>): Maybe<U> | ((maybe: Maybe<T>) => Maybe<U>) {
+  const op = (m: Maybe<T>): Maybe<U> => of(unsafeProp(prop, m.isJust() ? m.unsafelyGet() : null))
+  return curry1(op, maybe)
+}
+
 export function map<T, U>(mapFn: (t: T) => U): (maybe: Maybe<T>) => Maybe<U>
 export function map<T, U>(mapFn: (t: T) => U, maybe: Maybe<T>): Maybe<U>
 export function map<T, U> (
@@ -474,6 +493,7 @@ export const Maybe = {
   equals,
   ap,
   prop
+  pluck
 }
 
 export default Maybe

@@ -87,6 +87,18 @@ describe('`Task` pure functions', () => {
     await expect(Task.fold(matcher, badTask)).resolves.toEqual(errorVal)
   })
 
+  test('`pluck`', async () => {
+    expect.assertions(2)
+    const taskA = Task.of({ neat: 'string' })
+    const taskB = Task.pluck<Neat, Neat['neat']>('neat', taskA)
+    const taskC = Task.pluck('something_invalid', taskA)
+
+    expectTypeOf(taskB).toEqualTypeOf<Task<string>>()
+    await expect(taskB.run()).resolves.toEqual('string')
+
+    await expect(taskC.run()).rejects.toEqual("'something_invalid' not found")
+  })
+
   test('`map`', async () => {
     expect.assertions(1)
     const taskA = Task.of('string')
@@ -145,7 +157,7 @@ describe('`Task` class', () => {
     await expect(combined.run()).resolves.toEqual('the task is: broken')
   })
 
-  test('`fold`', async () => {
+  test('`fold` method', async () => {
     expect.assertions(2)
     const successVal = 'buff'
     const errorVal = 'duff'
@@ -166,7 +178,19 @@ describe('`Task` class', () => {
     await expect(badTask.fold(matcher)).resolves.toEqual(errorVal)
   })
 
-  test('`map`', async () => {
+  test('`pluck` method', async () => {
+    expect.assertions(2)
+    const taskA = Task.of({ neat: 'string' })
+    const taskB = taskA.pluck<Neat['neat']>('neat')
+    const taskC = taskA.pluck('something_invalid')
+
+    expectTypeOf(taskB).toEqualTypeOf<Task<string>>()
+    await expect(taskB.run()).resolves.toEqual('string')
+
+    await expect(taskC.run()).rejects.toEqual("'something_invalid' not found")
+  })
+
+  test('`map` method', async () => {
     expect.assertions(1)
     const taskA = Task.of('string')
     const taskB = taskA.map(length)
@@ -174,7 +198,7 @@ describe('`Task` class', () => {
     await expect(taskB.run()).resolves.toEqual(6)
   })
 
-  test('`chain`', async () => {
+  test('`chain` method', async () => {
     expect.assertions(1)
     const aTask = Task.of('Hello')
     const transform = (str:string) => Task.of(str + ', World!')
@@ -182,7 +206,7 @@ describe('`Task` class', () => {
     await expect(aTask.chain(transform).run()).resolves.toEqual('Hello, World!')
   })
 
-  test('`ap`', async () => {
+  test('`ap` method', async () => {
     expect.assertions(1)
     const add = (a: number) => (b: number) => a + b
     const addTask = Task.of(add)

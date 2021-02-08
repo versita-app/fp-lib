@@ -313,6 +313,17 @@ describe('`Maybe` pure functions', () => {
     expect(Maybe.get('quux', dict)).toEqual(Maybe.just('warble'))
     expect(Maybe.get('wat', dict)).toEqual(Maybe.nothing())
   })
+
+  test('`pluck`', () => {
+    const aMaybe = Maybe.just<Neat>({ neat: 'string' })
+
+    expect(Maybe.pluck('neat', aMaybe)).toEqual(Maybe.just('string'))
+    expect(Maybe.pluck('invalid_key', aMaybe)).toEqual(Maybe.nothing())
+
+    const aNothing = Maybe.nothing()
+
+    expect(Maybe.pluck('neat', aNothing)).toEqual(Maybe.nothing())
+  })
 })
 
 // We aren't even really concerned with the "runtime" behavior here, which we
@@ -520,6 +531,24 @@ describe('`Maybe.Just` class', () => {
       .get('with')
       .get('deeper')
       .get('key names')
+
+  test('`pluck` method', () => {
+    type DeepType = { something?: { with?: { deeper?: { 'key names'?: string } } } }
+
+    const allSet: DeepType = { something: { with: { deeper: { 'key names': 'like this' } } } }
+    const deepResult = new Maybe.Just(allSet)
+      .pluck('something')
+      .pluck('with')
+      .pluck('deeper')
+      .pluck('key names')
+    expect(deepResult).toEqual(Maybe.just('like this'))
+
+    const allEmpty: DeepType = {}
+    const emptyResult = new Maybe.Just(allEmpty)
+      .pluck('something')
+      .pluck('with')
+      .pluck('deeper')
+      .pluck('key names')
     expect(emptyResult).toEqual(Maybe.nothing())
   })
 })
@@ -659,6 +688,14 @@ describe('`Maybe.Nothing` class', () => {
       .get('with')
       .get('deeper')
       .get('key names')
+  test('`pluck` method', () => {
+    type DeepType = { something?: { with?: { deeper?: { 'key names'?: string } } } }
+
+    const result = new Maybe.Nothing<DeepType>()
+      .pluck('something')
+      .pluck('with')
+      .pluck('deeper')
+      .pluck('key names')
     expect(result).toEqual(Maybe.nothing())
   })
 })

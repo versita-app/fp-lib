@@ -107,6 +107,18 @@ describe('`TaskEither` pure functions', () => {
     await expect(aFailedTaskE.run()).resolves.toEqual(left('failed'))
   })
 
+  describe('`pluck`', async () => {
+    const aTask = TaskEither.of({ neat: 'string' })
+    const validProp = TaskEither.pluck<null, Neat, string>('neat', aTask)
+    const invalidProp = TaskEither.pluck<null, Neat, string>('guff', aTask)
+    const onALeft = TaskEither.pluck('guff', TaskEither.reject('duff'))
+
+    expectTypeOf(validProp).toEqualTypeOf<TaskEither<string | null, string>>()
+    await expect(validProp.run()).resolves.toEqual(Either.of('string'))
+    await expect(invalidProp.run()).resolves.toEqual(left("'guff' not found"))
+    await expect(onALeft.run()).resolves.toEqual(left("'duff' not found"))
+  })
+
   test('`map`', async () => {
     expect.assertions(1)
     const taskA = TaskEither.of('string')
@@ -158,6 +170,18 @@ describe('`TaskEither` class', () => {
     const anEither = Either.of<Neat>({ neat: 'strings' })
     const aTaskE = new TaskEither<never, Neat>((resolve) => resolve(anEither))
     await expect(aTaskE.runIfValid()).resolves.toEqual(anEither)
+  })
+
+  describe('`pluck`', async () => {
+    const aTask = TaskEither.of<Neat>({ neat: 'string' })
+    const validProp = aTask.pluck<string>('neat')
+    const invalidProp = aTask.pluck<string>('guff')
+    const onALeft = TaskEither.reject('duff').pluck('guff')
+
+    expectTypeOf(validProp).toEqualTypeOf<TaskEither<string | null, string>>()
+    await expect(validProp.run()).resolves.toEqual(Either.of('string'))
+    await expect(invalidProp.run()).resolves.toEqual(left("'guff' not found"))
+    await expect(onALeft.run()).resolves.toEqual(left("'duff' not found"))
   })
 
   test('`map`', async () => {

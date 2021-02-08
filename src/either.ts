@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-use-before-define */
 import Monad from './monad'
-import { curry1 } from './helpers'
+import { curry1, unsafeProp } from './helpers'
 
 import { MapCallback } from './types/common'
 
@@ -33,7 +33,8 @@ interface EitherShape<L, R> extends Monad {
   isRight (this: Either<L, R>): this is Right<R>
   fold<L2, R2> (this: Either<L, R>, matcher: Matcher<L, L2, R, R2>): L2 | R2
   toJSON(this: Either<L, R>): EitherJSON<L, R>
-  toString(this: Either<L, R>): string
+  toString(this: Either<L, R>): string,
+  pluck<R2> (this: Either<L, R>, prop: string): Either<L, R2>
   map<R2> (this: Either<L, R>, mapFn: MapCallback<R, R2>): Either<L, R2>
   chain<R2> (this: Either<L, R>, chainFn: (r: R) => Either<L, R2>): Either<L, R2>
   ap<R2, R3> (this: Either<L, (r: R2) => R3>, either2: Either<L, R2>): Either<L, R3> | Left<TypeError>
@@ -77,6 +78,10 @@ export class Left<L> implements EitherShape<L, never> {
 
   fold<A, B> (matcher: Matcher<L, A, any, B>): A {
     return fold<L, A, any, any>(matcher, this)
+  }
+
+  pluck (this: Either<L, never>): Either<L, never> {
+    return this
   }
 
   map (): this {
@@ -130,6 +135,10 @@ export class Right<R> implements EitherShape<any, R> {
 
   fold<A, B> (matcher: Matcher<any, A, R, B>): B {
     return fold<any, any, R, B>(matcher, this)
+  }
+
+  pluck<R2> (this: Either<any, R>, prop: string): Either<any, R2> {
+    return pluck<any, R, R2>(prop, this)
   }
 
   map<R2> (this: Either<any, R>, f: MapCallback<R, R2>): Either<any, R2> {
@@ -222,6 +231,20 @@ export function fold <L, L2, R, R2> (matcher: Matcher<L, L2, R, R2>, either?: Ei
 }
 
 /**
+ * Equivalent to map(prop(x))
+ */
+export function pluck <L, R, R2> (prop: string, either: Either<L, R>): Either<L | string, R2>
+export function pluck <L, R, R2> (prop: string): (either: Either<L, R>) => Either<L | string, R2>
+export function pluck <L, R, R2> (prop: string, either?: Either<L, R>): Either<L | string, R2> | ((either: Either<L, R>) => Either<L | string, R2>) {
+  const op = (e: Either<L, R>) => {
+    if (e.isLeft()) { return e }
+    const propValue = unsafeProp(prop, e.get())
+    return propValue ? Either.of(propValue as R2) : left(`'${prop}' not found`)
+  }
+  return curry1(op, either)
+}
+
+/**
  * Applies the transformation (f) if Right
  */
 export function map <L, R, R2> (f: MapCallback<R, R2>, either: Either<L, R>): Either<L, R2>
@@ -272,6 +295,7 @@ export const Either = {
   isRight,
   tryCatch,
   fold,
+  pluck,
   map,
   chain,
   ap

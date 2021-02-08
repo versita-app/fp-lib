@@ -8,10 +8,11 @@ export function curry1<T, U> (op: (t: T) => U, item?: T): U | ((t:T) => U) {
  * returns a property based on supplied key if it exists
  * or the specified fallback if not
  */
-export function propOr<T, U = unknown> (prop: string, fallback: unknown, object: T): U | typeof fallback
-export function propOr<T, U = unknown> (prop: string, fallback: unknown): (object: T) => U | typeof fallback
-export function propOr<T, U = unknown> (prop: string, fallback: unknown, object?: T): U | ((object: T) => U) | typeof fallback {
-  const op = (o:any): U | typeof fallback => o?.[prop] || fallback
+export function propOr<T, U = unknown, V = unknown> (prop: string, fallback: V, object: T): U |V
+export function propOr<T, U = unknown, V = unknown> (prop: string, fallback: V): (object: T) => U | V
+export function propOr<T, U = unknown, V = unknown> (prop: string, fallback: V, object?: T): U | ((object: T) => U) | V {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const op = (o:any) => o?.[prop] || fallback
   return curry1(op, object)
 }
 

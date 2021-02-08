@@ -93,6 +93,35 @@ describe('`Either` pure functions', () => {
     expect(Either.fold(matcher)(aRight)).toEqual(Either.fold(matcher, aRight))
   })
 
+  describe('`pluck`', () => {
+    test('on a Right', () => {
+      const rightNeat = Either.of({ neat: 'string' })
+      const aString = Either.pluck<never, Neat, string>('neat', rightNeat)
+      const shouldntWork = Either.pluck('duff', rightNeat)
+
+      if (Either.isRight(aString)) {
+        expectTypeOf(aString).toEqualTypeOf<Right<string>>()
+      } else {
+        throw Error('map test failed: expected Right and got Left')
+      }
+      expect(aString).toEqual(Either.of('string'))
+      expect(shouldntWork).toEqual(left("'duff' not found"))
+    })
+    test('`on a Left`', () => {
+      const leftNeat = new Left({ neat: 'string' })
+      const noChange = Either.pluck<Neat, never, never>('neat', leftNeat)
+      const shouldntWork = Either.pluck('duff', leftNeat)
+
+      if (Either.isLeft(noChange)) {
+        expectTypeOf(noChange).toEqualTypeOf<Left<Neat | string>>()
+      } else {
+        throw Error('map test failed: expected Left and got Right')
+      }
+      expect(noChange).toEqual(new Left({ neat: 'string' }))
+      expect(shouldntWork).toEqual(new Left({ neat: 'string' }))
+    })
+  })
+
   describe('`map`', () => {
     test('on a Right', () => {
       const rightString = Either.of('string')
@@ -263,6 +292,20 @@ describe('`Either.Right` class', () => {
     ).toEqual('this is a string, yo')
   })
 
+  describe('`pluck`', () => {
+    const rightNeat = Either.of({ neat: 'string' })
+    const aString = rightNeat.pluck<string>('neat')
+    const shouldntWork = rightNeat.pluck('duff')
+
+    if (Either.isRight(aString)) {
+      expectTypeOf(aString).toEqualTypeOf<Right<string>>()
+    } else {
+      throw Error('map test failed: expected Right and got Left')
+    }
+    expect(aString).toEqual(Either.of('string'))
+    expect(shouldntWork).toEqual(left("'duff' not found"))
+  })
+
   test('`map` method', () => {
     const plus2 = (x: number) => x + 2
     const theValue = 12
@@ -360,6 +403,20 @@ describe('`Either.Left` class', () => {
         Left: (val) => val + ', yo'
       })
     ).toEqual('this is a string, yo')
+  })
+
+  describe('`pluck`', () => {
+    const leftNeat = new Left<Neat>({ neat: 'string' })
+    const noChange = leftNeat.pluck()
+    const shouldntWork = leftNeat.pluck()
+
+    if (Either.isLeft(noChange)) {
+      expectTypeOf(noChange).toEqualTypeOf<Left<Neat>>()
+    } else {
+      throw Error('map test failed: expected Left and got Right')
+    }
+    expect(noChange).toEqual(new Left({ neat: 'string' }))
+    expect(shouldntWork).toEqual(new Left({ neat: 'string' }))
   })
 
   test('`map` method', () => {

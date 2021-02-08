@@ -1,5 +1,5 @@
 import { MapCallback } from './types/common'
-import { curry1 } from './helpers'
+import { curry1, unsafeProp } from './helpers'
 import Monad from './monad'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -40,6 +40,10 @@ export default class Task<T> extends Monad {
     return fold(matcher, task)
   }
 
+  static pluck <T, U> (prop: string, task: Task<T>): Task<U> {
+    return pluck(prop, task)
+  }
+
   static map <T, U> (f: MapCallback<T, U>, task: Task<T>): Task<U> {
     return map(f, task)
   }
@@ -73,6 +77,10 @@ export default class Task<T> extends Monad {
 
   fold <E, U> (this: Task<T>, matcher: Matcher<E, T, U>): Promise<E | U> {
     return fold<E, T, U>(matcher, this)
+  }
+
+  pluck <U> (this: Task<T>, prop: string): Task<U> {
+    return pluck<T, U>(prop, this)
   }
 
   map <U> (this: Task<T>, f: MapCallback<T, U>): Task<U> {
@@ -150,6 +158,24 @@ export function fold <E, T, U> (matcher: Matcher<E, T, U>, task?: Task<T>): Prom
     (resolve) => t.fork(
       (e) => resolve(matcher.Error(e)),
       (b) => resolve(matcher.Success(b))
+    )
+  )
+  return curry1(op, task)
+}
+
+/**
+ * Equivalent to map(prop(x))
+ */
+export function pluck <T, U> (prop: string, task: Task<T>): Task<U>
+export function pluck <T, U> (prop: string): (task: Task<T>) => Task<U>
+export function pluck <T, U> (prop: string, task?: Task<T>): Task<U> | ((task: Task<T>) => Task<U>) {
+  const op = (t: Task<T>) => new Task<U>(
+    (reject, resolve) => t.fork(
+      reject,
+      (res) => {
+        const propValue = unsafeProp(prop, res)
+        return propValue ? resolve(propValue as U) : reject(`'${prop}' not found`)
+      }
     )
   )
   return curry1(op, task)

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Either, { left } from './either'
-import { curry1 } from './helpers'
+import { curry1, unsafeProp } from './helpers'
 import { MapCallback } from './types/common'
 import Monad from './monad'
 import Task from './task'
@@ -41,6 +41,10 @@ export default class TaskEither<L, R> extends Monad {
     return runIfValid<L, R>(x)
   }
 
+  static pluck <L, R, R2> (prop: string, taskeither: TaskEither<L, R>): TaskEither<L | string, R2> {
+    return pluck<L, R, R2>(prop, taskeither)
+  }
+
   static map <L, R, R2> (f: MapCallback<R, R2>, taskeither: TaskEither<L, R>): TaskEither<L, R2> {
     return map<L, R, R2>(f, taskeither)
   }
@@ -66,6 +70,10 @@ export default class TaskEither<L, R> extends Monad {
 
   runIfValid<L, R> (this: TaskEither<L, R>): Promise<Either<L, R>> | Promise<unknown> {
     return runIfValid<L, R>(this)
+  }
+
+  pluck <R2> (this: TaskEither<L, R>, prop: string): TaskEither<L | string, R2> {
+    return pluck<L, R, R2>(prop, this)
   }
 
   map <R2> (this: TaskEither<L, R>, f: MapCallback<R, R2>): TaskEither<L, R2> {
@@ -153,6 +161,24 @@ export function runIfValid<L, R> (x: unknown): Promise<typeof x> | Promise<Eithe
  */
 export function run <L, R> (taskeither: TaskEither<L, R>): Promise<Either<L, R>> {
   return new Promise(taskeither.computation)
+}
+
+/**
+ * Equivalent to map(prop(x))
+ */
+export function pluck <L, R, R2> (prop: string, taskeither: TaskEither<L, R>): TaskEither<L | string, R2>
+export function pluck <L, R, R2> (prop: string): (taskeither: TaskEither<L, R>) => TaskEither<L | string, R2>
+export function pluck <L, R, R2> (prop: string, taskeither?: TaskEither<L, R>): TaskEither<L | string, R2> | ((taskeither: TaskEither<L, R>) => TaskEither<L | string, R2>) {
+  const op = (te: TaskEither<L, R>) => new TaskEither<L | string, R2>(
+    resolve => te.computation(
+      (res) => {
+        if (res.isLeft()) { return resolve(res) }
+        const propValue = unsafeProp(prop, res.get())
+        return resolve(propValue ? Either.of(propValue as R2) : left(`'${prop}' not found`))
+      }
+    )
+  )
+  return curry1(op, taskeither)
 }
 
 /**
