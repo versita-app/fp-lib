@@ -1,4 +1,4 @@
-![tests](https://github.com/versita-app/fp-lib/workflows/tests/badge.svg)
+![tests](https://github.com/versita-app/fp-lib/workflows/tests/badge.svg) ![CodeQL](https://github.com/versita-app/fp-lib/workflows/CodeQL/badge.svg)
 ## FP-lib
 
 A loose fork/heavily inspired by [True Myth](https://github.com/true-myth/true-myth/) with four main wrappers/classes:
