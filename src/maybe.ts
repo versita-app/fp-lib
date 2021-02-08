@@ -37,7 +37,6 @@ interface MaybeShape<T> extends Monad {
   and<U>(this: Maybe<T>, mAnd: Maybe<U>): Maybe<U>
   chain<U>(this: Maybe<T>, chainFn: (t: T) => Maybe<U>): Maybe<U>
   unsafelyGet(): T | never
-  get<K extends keyof T>(this: Maybe<T>, key: K): Maybe<NonNullable<T[K]>>
   getOrElse<U>(this: Maybe<T>, elseFn: () => U): T | U
   toString(this: Maybe<T>): string
   toJSON(this: Maybe<T>): MaybeJSON<T>
@@ -107,10 +106,6 @@ export class Just<T> implements MaybeShape<T> {
 
   unsafelyGet (): T {
     return this.$value
-  }
-
-  get<K extends keyof T> (this: Maybe<T>, key: K): Maybe<NonNullable<T[K]>> {
-    return this.chain(prop(key))
   }
 
   getOr<U> (this: Maybe<T>, defaultValue: U): T | U {
@@ -195,10 +190,6 @@ export class Nothing<T> implements MaybeShape<T> {
 
   unsafelyGet (): never {
     throw new Error('Tried to `unsafelyGet(Nothing)`')
-  }
-
-  get<K extends keyof T> (this: Maybe<T>, key: K): Maybe<NonNullable<T[K]>> {
-    return this.chain(prop(key))
   }
 
   getOr<U> (this: Maybe<T>, defaultValue: U): T | U {
@@ -492,7 +483,7 @@ export const Maybe = {
   fold,
   equals,
   ap,
-  prop
+  prop,
   pluck
 }
 

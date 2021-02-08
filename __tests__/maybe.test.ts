@@ -461,7 +461,7 @@ describe('`Maybe.Just` class', () => {
     expect(theJust.chain(toDescription)).toEqual(theExpectedResult)
   })
 
-  test('`get` method', () => {
+  test('`unsafelyGet` method', () => {
     const theValue = 'value'
     const theJust = new Maybe.Just(theValue)
     expect(theJust.unsafelyGet()).toEqual(theValue)
@@ -519,18 +519,20 @@ describe('`Maybe.Just` class', () => {
 
     const allSet: DeepType = { something: { with: { deeper: { 'key names': 'like this' } } } }
     const deepResult = new Maybe.Just(allSet)
-      .get('something')
-      .get('with')
-      .get('deeper')
-      .get('key names')
+      .chain(Maybe.prop('something'))
+      .chain(Maybe.prop('with'))
+      .chain(Maybe.prop('deeper'))
+      .chain(Maybe.prop('key names'))
     expect(deepResult).toEqual(Maybe.just('like this'))
 
     const allEmpty: DeepType = {}
     const emptyResult = new Maybe.Just(allEmpty)
-      .get('something')
-      .get('with')
-      .get('deeper')
-      .get('key names')
+      .chain(Maybe.prop('something'))
+      .chain(Maybe.prop('with'))
+      .chain(Maybe.prop('deeper'))
+      .chain(Maybe.prop('key names'))
+    expect(emptyResult).toEqual(Maybe.nothing())
+  })
 
   test('`pluck` method', () => {
     type DeepType = { something?: { with?: { deeper?: { 'key names'?: string } } } }
@@ -684,10 +686,24 @@ describe('`Maybe.Nothing` class', () => {
     type DeepType = { something?: { with?: { deeper?: { 'key names'?: string } } } }
 
     const result = new Maybe.Nothing<DeepType>()
-      .get('something')
-      .get('with')
-      .get('deeper')
-      .get('key names')
+      .chain(Maybe.prop('something'))
+      .chain(Maybe.prop('with'))
+      .chain(Maybe.prop('deeper'))
+      .chain(Maybe.prop('key names'))
+    expect(result).toEqual(Maybe.nothing())
+  })
+
+  test('`prop` method', () => {
+    type DeepType = { something?: { with?: { deeper?: { 'key names'?: string } } } }
+
+    const result = new Maybe.Nothing<DeepType>()
+      .chain(Maybe.prop('something'))
+      .chain(Maybe.prop('with'))
+      .chain(Maybe.prop('deeper'))
+      .chain(Maybe.prop('key names'))
+    expect(result).toEqual(Maybe.nothing())
+  })
+
   test('`pluck` method', () => {
     type DeepType = { something?: { with?: { deeper?: { 'key names'?: string } } } }
 
