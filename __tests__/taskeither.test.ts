@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prefer-promise-reject-errors */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import Either, { left, Left } from '../src/either'
@@ -29,10 +30,10 @@ describe('`TaskEither` pure functions', () => {
   test('`of`', async () => {
     expect.assertions(1)
     const anOf = TaskEither.of<Neat>({ neat: 'strings' })
-    expectTypeOf(anOf).toEqualTypeOf<TaskEither<null, Neat>>()
+    expectTypeOf(anOf).toEqualTypeOf<TaskEither<any, Neat>>()
 
     const anotherOf = TaskEither.of(42)
-    expectTypeOf(anotherOf).toEqualTypeOf<TaskEither<null, number>>()
+    expectTypeOf(anotherOf).toEqualTypeOf<TaskEither<any, number>>()
 
     await expect(TaskEither.run(anotherOf)).resolves.toEqual(Either.of(42))
   })
@@ -107,32 +108,40 @@ describe('`TaskEither` pure functions', () => {
     await expect(aFailedTaskE.run()).resolves.toEqual(left('failed'))
   })
 
-  describe('`pluck`', async () => {
+  test('`pluck`', async () => {
     const aTask = TaskEither.of({ neat: 'string' })
-    const validProp = TaskEither.pluck<null, Neat, string>('neat', aTask)
-    const invalidProp = TaskEither.pluck<null, Neat, string>('guff', aTask)
+    const validProp = TaskEither.pluck<unknown, Neat, string>('neat', aTask)
+    const invalidProp = TaskEither.pluck<unknown, Neat, string>('guff', aTask)
     const onALeft = TaskEither.pluck('guff', TaskEither.reject('duff'))
 
-    expectTypeOf(validProp).toEqualTypeOf<TaskEither<string | null, string>>()
+    expectTypeOf(validProp).toEqualTypeOf<TaskEither<string | unknown, string>>()
     await expect(validProp.run()).resolves.toEqual(Either.of('string'))
     await expect(invalidProp.run()).resolves.toEqual(left("'guff' not found"))
-    await expect(onALeft.run()).resolves.toEqual(left("'duff' not found"))
+    await expect(onALeft.run()).resolves.toEqual(left('duff'))
   })
 
   test('`map`', async () => {
-    expect.assertions(1)
+    expect.assertions(2)
     const taskA = TaskEither.of('string')
     const taskB = TaskEither.map(length, taskA)
-    expectTypeOf(taskB).toEqualTypeOf<TaskEither<null, number>>()
+    const taskC = TaskEither.map(length, TaskEither.reject('nope'))
+    expectTypeOf(taskB).toEqualTypeOf<TaskEither<any, number>>()
     await expect(taskB.run()).resolves.toEqual(Either.of(6))
+    await expect(taskC.run()).resolves.toEqual(left('nope'))
   })
 
   test('`chain`', async () => {
-    expect.assertions(1)
+    expect.assertions(2)
     const aTask = TaskEither.of('Hello')
     const transform = (str:string) => TaskEither.of(str + ', World!')
 
     await expect(TaskEither.chain(transform, aTask).run()).resolves.toEqual(Either.of('Hello, World!'))
+
+    // with a rejected promise
+    const badTaskE = TaskEither.reject('broken')
+    const badChain = TaskEither.chain(() => TaskEither.of('we shouldnt see this'), badTaskE)
+
+    await expect(badChain.run()).resolves.toEqual(left('broken'))
   })
 
   test('`ap`', async () => {
@@ -172,23 +181,23 @@ describe('`TaskEither` class', () => {
     await expect(aTaskE.runIfValid()).resolves.toEqual(anEither)
   })
 
-  describe('`pluck`', async () => {
+  test('`pluck`', async () => {
     const aTask = TaskEither.of<Neat>({ neat: 'string' })
     const validProp = aTask.pluck<string>('neat')
     const invalidProp = aTask.pluck<string>('guff')
     const onALeft = TaskEither.reject('duff').pluck('guff')
 
-    expectTypeOf(validProp).toEqualTypeOf<TaskEither<string | null, string>>()
+    expectTypeOf(validProp).toEqualTypeOf<TaskEither<any | string, string>>()
     await expect(validProp.run()).resolves.toEqual(Either.of('string'))
     await expect(invalidProp.run()).resolves.toEqual(left("'guff' not found"))
-    await expect(onALeft.run()).resolves.toEqual(left("'duff' not found"))
+    await expect(onALeft.run()).resolves.toEqual(left('duff'))
   })
 
   test('`map`', async () => {
     expect.assertions(1)
     const taskA = TaskEither.of('string')
     const taskB = taskA.map(length)
-    expectTypeOf(taskB).toEqualTypeOf<TaskEither<null, number>>()
+    expectTypeOf(taskB).toEqualTypeOf<TaskEither<any, number>>()
     await expect(taskB.run()).resolves.toEqual(Either.of(6))
   })
 

@@ -9,7 +9,7 @@ export type TaskEitherResolve <T> = (res: T) => void
 export type TaskEitherCallback <L, R> = (resolve: TaskEitherResolve<Either<L, R>>) => void
 
 export default class TaskEither<L, R> extends Monad {
-  static of <R> (r: R): TaskEither<null, R> {
+  static of <R> (r: R): TaskEither<any, R> {
     return of(r)
   }
 
@@ -92,7 +92,7 @@ export default class TaskEither<L, R> extends Monad {
 /**
  * Creates a TaskEither that will resolve to Right<r>
  */
-export function of <R> (r: R): TaskEither<null, R> {
+export function of <R> (r: R): TaskEither<any, R> {
   const taskDefault: TaskEitherCallback<never, R> = (resolve) => resolve(Either.of(r))
   return new TaskEither(taskDefault)
 }
@@ -191,7 +191,7 @@ export function map <L, R, R2> (f: MapCallback<R, R2>): (taskeither: TaskEither<
 export function map <L, R, R2> (f: MapCallback<R, R2>, taskeither?: TaskEither<L, R>): TaskEither<L, R2> | ((taskeither: TaskEither<L, R>) => TaskEither<L, R2>) {
   const op = (te: TaskEither<L, R>) => new TaskEither<L, R2>(
     resolve => te.computation(
-      (res) => resolve(res.map(f))
+      (res) => res.isLeft() ? resolve(res) : resolve(res.map(f))
     )
   )
   return curry1(op, taskeither)
@@ -207,7 +207,7 @@ export function chain <L, R, R2> (f: MapCallback<R, TaskEither<L, R2>>): (taskei
 export function chain <L, R, R2> (f: MapCallback<R, TaskEither<L, R2>>, taskeither?: TaskEither<L, R>): TaskEither<L, R2> | ((taskeither: TaskEither<L, R>) => TaskEither<L, R2>) {
   const op = (te: TaskEither<L, R>) => new TaskEither<L, R2>(
     (resolve) => te.computation(
-      (res: Either<L, R>) => res.map((value: R) => f(value).computation(resolve))
+      (res: Either<L, R>) => res.isLeft() ? resolve(res) : res.map((value: R) => f(value).computation(resolve))
     )
   )
   return curry1(op, taskeither)
